@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MathUtils
@@ -27,5 +28,39 @@ public class MathUtils
     public static Vector3 WorldToLocal(Vector3 worldPoint, Vector3 referencePoint)
     {
         return worldPoint - referencePoint;
+    }
+
+    public static List<Vector3> BounceLaser(float maxLaserDistance, Vector3 rayStartPoint, Vector3 rayStartDirection, bool useUnityLibrary = false, bool drawGizmos = true) {
+        var totalRayDistance = maxLaserDistance;
+        var raycastSucceeded = true;
+        var rayOrigin = rayStartPoint;
+        var rayDirection = rayStartDirection;
+
+        var hitPoints = new List<Vector3>(){rayOrigin};
+
+        while(totalRayDistance > 0f && raycastSucceeded)
+        {
+            raycastSucceeded = Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hitInfo, totalRayDistance, Physics.AllLayers);
+
+            var surfaceNormal = hitInfo.normal;
+
+            hitPoints.Add(raycastSucceeded ? hitInfo.point : (rayOrigin + rayDirection * totalRayDistance));
+
+            rayOrigin = hitInfo.point;
+            rayDirection = useUnityLibrary ? Vector3.Reflect(rayDirection, surfaceNormal) : ReflectVector(rayDirection, surfaceNormal);
+
+            totalRayDistance -= hitInfo.distance;
+        }
+
+        if(drawGizmos)
+        {
+            for(int i = 0; i < hitPoints.Count - 1; i++)
+                Gizmos.DrawLine(hitPoints[i], hitPoints[i + 1]);
+
+            foreach(var point in hitPoints)
+                Gizmos.DrawSphere(point, 0.1f);
+        }
+
+        return hitPoints;
     }
 }

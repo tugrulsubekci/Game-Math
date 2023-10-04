@@ -13,5 +13,7 @@ public class TurretEditor : Editor
         if(GUILayout.Button("Place Turret"))
             targetObject.PlaceTurret();
 
+        if(GUILayout.Button(targetObject.fire ? "Stop Fire" : "Start Fire"))
+            targetObject.Fire();
     }
 }

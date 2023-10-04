@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,11 +7,16 @@ public class Turret : MonoBehaviour
     private Camera MainCamera => SceneView.lastActiveSceneView.camera;
     [SerializeField] private GameObject platform;
     [SerializeField] private GameObject trigger;
+    [SerializeField] private GameObject turretHead;
     [SerializeField] private float angle = 30;
     [SerializeField] private float radius = 3.0f;
     [SerializeField] private float height = 3.0f;
+    [SerializeField] private float headRotationSpeed = 1.0f;
+    [SerializeField] private float maxFireRange = 10.0f;
     private Vector3 downPosition => transform.position;
     private Vector3 upPosition => transform.position + transform.up * height;
+    private Quaternion defaultOrientationOfHead => Quaternion.LookRotation(transform.forward, transform.up);
+    [HideInInspector] public bool fire = false; 
     private void OnDrawGizmosSelected() {
         Physics.Raycast(MainCamera.transform.position, MainCamera.transform.forward, out RaycastHit hitInfo, 100f);
 
@@ -35,7 +41,9 @@ public class Turret : MonoBehaviour
         var leftDown = downPosition + leftRay * radius;
         var leftUp = upPosition + leftRay * radius;
 
-        Gizmos.color = TriggerCheck(trigger.transform.position) ? Color.red : Color.green;
+        bool isTargetInside = TriggerCheck(trigger.transform.position);
+
+        Gizmos.color = isTargetInside ? Color.red : Color.green;
 
         Gizmos.DrawLine(downPosition, rightDown);
         Gizmos.DrawLine(downPosition, leftDown);
@@ -45,7 +53,19 @@ public class Turret : MonoBehaviour
 
         Gizmos.DrawLine(rightDown, rightUp);
         Gizmos.DrawLine(leftDown, leftUp);
-        
+
+        // Turret Head Rotation Section (DO NOT FORGET "ALWAYS REFRESH" IN SCENE VIEW)------------------------------------
+        var fromRotation = turretHead.transform.rotation;
+        var toRotation = isTargetInside ? Quaternion.LookRotation(trigger.transform.position - turretHead.transform.position, transform.up) : defaultOrientationOfHead;
+        var deltaRotation = Quaternion.Angle(fromRotation, toRotation);
+
+        turretHead.transform.rotation = LerpRotation(fromRotation, toRotation, headRotationSpeed / deltaRotation);
+        // Turret Head Rotation Section ----------------------------------------------------------------------------------
+
+        Gizmos.color = Color.yellow;
+
+        if(fire)
+            MathUtils.BounceLaser(maxFireRange, turretHead.transform.position, turretHead.transform.forward);
     }
 
     public void PlaceTurret() {
@@ -56,6 +76,10 @@ public class Turret : MonoBehaviour
             transform.position = hitInfo.point;
             transform.rotation = Quaternion.LookRotation(Vector3.Cross(MainCamera.transform.right, hitInfo.normal), hitInfo.normal);
         }
+    }
+
+    public void Fire() {
+        fire = !fire;
     }
 
     public bool TriggerCheck(Vector3 triggerPosition) {
@@ -77,6 +101,11 @@ public class Turret : MonoBehaviour
             return false;
 
         return true;
+    }
+
+    private Quaternion LerpRotation(Quaternion from, Quaternion to, float t)
+    {
+        return Quaternion.Slerp(from, to, t);
     }
 
 }
