@@ -883,7 +883,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 323029057}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.98600006, y: 1.287, z: -5.698}
+  m_LocalPosition: {x: 1.584, y: 1.123, z: -5.74}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2341,11 +2341,12 @@ MonoBehaviour:
   trigger: {fileID: 323029057}
   turretHead: {fileID: 2032368067}
   angle: 90
-  radius: 2
+  maxRadius: 3
+  minRadius: 1.34
   height: 1
   headRotationSpeed: 0.5
-  maxFireRange: 6.24
-  fire: 1
+  maxFireRange: 6.64
+  fire: 0
 --- !u!1 &1568743670
 GameObject:
   m_ObjectHideFlags: 0
@@ -2940,7 +2941,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1761318295}
   m_Layer: 0
-  m_Name: Assignment 4-5-6
+  m_Name: Assignment 4-5-6-7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3462,7 +3463,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2032368067}
-  m_LocalRotation: {x: 0.13994838, y: -0.01650031, z: 0.002332475, w: 0.99001855}
+  m_LocalRotation: {x: 0.15870975, y: 0.12869169, z: -0.020869564, w: 0.97867984}
   m_LocalPosition: {x: 0, y: 1.1000061, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 1

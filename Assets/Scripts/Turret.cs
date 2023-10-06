@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,7 +8,8 @@ public class Turret : MonoBehaviour
     [SerializeField] private GameObject trigger;
     [SerializeField] private GameObject turretHead;
     [SerializeField] private float angle = 30;
-    [SerializeField] private float radius = 3.0f;
+    [SerializeField] private float maxRadius = 3.0f;
+    [SerializeField] private float minRadius = 1.0f;
     [SerializeField] private float height = 3.0f;
     [SerializeField] private float headRotationSpeed = 1.0f;
     [SerializeField] private float maxFireRange = 10.0f;
@@ -30,36 +30,43 @@ public class Turret : MonoBehaviour
     }
 
     private void OnDrawGizmos() {
-        Handles.DrawWireDisc(downPosition, transform.up, radius);
-        Handles.DrawWireDisc(upPosition, transform.up, radius);
-
         var rightRay = transform.forward * Mathf.Sin((90 - angle / 2.0f) * Mathf.Deg2Rad ) + transform.right * Mathf.Cos((90 - angle / 2.0f) * Mathf.Deg2Rad );
         var leftRay = transform.forward * Mathf.Sin((90 - angle / 2.0f) * Mathf.Deg2Rad ) - transform.right * Mathf.Cos((90 - angle / 2.0f) * Mathf.Deg2Rad );
 
-        var rightDown = downPosition + rightRay * radius;
-        var rightUp = upPosition + rightRay * radius;
-        var leftDown = downPosition + leftRay * radius;
-        var leftUp = upPosition + leftRay * radius;
+        var rightDown = downPosition + rightRay * maxRadius;
+        var rightUp = upPosition + rightRay * maxRadius;
+        var leftDown = downPosition + leftRay * maxRadius;
+        var leftUp = upPosition + leftRay * maxRadius;
 
         bool isTargetInside = TriggerCheck(trigger.transform.position);
 
         Gizmos.color = isTargetInside ? Color.red : Color.green;
+        Handles.color = isTargetInside ? Color.red : Color.green;
 
-        Gizmos.DrawLine(downPosition, rightDown);
-        Gizmos.DrawLine(downPosition, leftDown);
+        Gizmos.DrawLine(downPosition + rightRay * minRadius, rightDown);
+        Gizmos.DrawLine(downPosition + leftRay * minRadius, leftDown);
 
-        Gizmos.DrawLine(upPosition, rightUp);
-        Gizmos.DrawLine(upPosition, leftUp);
+        Gizmos.DrawLine(upPosition + rightRay * minRadius, rightUp);
+        Gizmos.DrawLine(upPosition + leftRay * minRadius, leftUp);
 
         Gizmos.DrawLine(rightDown, rightUp);
         Gizmos.DrawLine(leftDown, leftUp);
+
+        Gizmos.DrawLine(downPosition + rightRay * minRadius, upPosition + rightRay * minRadius);
+        Gizmos.DrawLine(downPosition + leftRay * minRadius, upPosition + leftRay * minRadius);
+
+        Handles.DrawWireArc(upPosition, transform.up, leftRay, angle, maxRadius);
+        Handles.DrawWireArc(downPosition, transform.up, leftRay, angle, maxRadius);
+
+        Handles.DrawWireArc(upPosition, transform.up, leftRay * minRadius, angle, minRadius);
+        Handles.DrawWireArc(downPosition, transform.up, leftRay * minRadius, angle, minRadius);
 
         // Turret Head Rotation Section (DO NOT FORGET "ALWAYS REFRESH" IN SCENE VIEW)------------------------------------
         var fromRotation = turretHead.transform.rotation;
         var toRotation = isTargetInside ? Quaternion.LookRotation(trigger.transform.position - turretHead.transform.position, transform.up) : defaultOrientationOfHead;
         var deltaRotation = Quaternion.Angle(fromRotation, toRotation);
 
-        turretHead.transform.rotation = LerpRotation(fromRotation, toRotation, headRotationSpeed / deltaRotation);
+        turretHead.transform.rotation = Quaternion.Slerp(fromRotation, toRotation, headRotationSpeed / deltaRotation);
         // Turret Head Rotation Section ----------------------------------------------------------------------------------
 
         Gizmos.color = Color.yellow;
@@ -93,7 +100,7 @@ public class Turret : MonoBehaviour
         // cylindirical radius check
         var ignoreYAxis = new Vector3(dirToTargetLocal.x, 0, dirToTargetLocal.z);
 
-        if(ignoreYAxis.magnitude > radius)
+        if(ignoreYAxis.magnitude > maxRadius || ignoreYAxis.magnitude < minRadius)
             return false;
 
         // angle check
@@ -102,10 +109,4 @@ public class Turret : MonoBehaviour
 
         return true;
     }
-
-    private Quaternion LerpRotation(Quaternion from, Quaternion to, float t)
-    {
-        return Quaternion.Slerp(from, to, t);
-    }
-
 }
