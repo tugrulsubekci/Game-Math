@@ -11,23 +11,29 @@ public class MathUtils
 
     public static Vector3 LocalToWorld(Vector3 localPoint, Transform transform)
     {
-        var right = (Vector3)transform.worldToLocalMatrix.GetColumn(0).normalized;
-        var up = (Vector3)transform.worldToLocalMatrix.GetColumn(1).normalized;
-        var forward = (Vector3)transform.worldToLocalMatrix.GetColumn(2).normalized;
         var position = transform.position;
 
-        var dotRight = Vector3.Dot(localPoint, right);
-        var dotUp = Vector3.Dot(localPoint, up);
-        var dotForward = Vector3.Dot(localPoint, forward);
-        
-        position += new Vector3(dotRight, dotUp, dotForward);
+        // FIRST WAY ---------------------------------------------------------------
+        // var right = (Vector3)transform.worldToLocalMatrix.GetColumn(0).normalized;
+        // var up = (Vector3)transform.worldToLocalMatrix.GetColumn(1).normalized;
+        // var forward = (Vector3)transform.worldToLocalMatrix.GetColumn(2).normalized;
+        // var dotRight = Vector3.Dot(localPoint, right);
+        // var dotUp = Vector3.Dot(localPoint, up);
+        // var dotForward = Vector3.Dot(localPoint, forward);
+        // position += new Vector3(dotRight, dotUp, dotForward);
+
+        // SECOND WAY ---------------------------------------------------------------
+        position += localPoint.x * transform.right;
+        position += localPoint.y * transform.up;
+        position += localPoint.z * transform.forward;
 
         return position;
     }
 
-    public static Vector3 WorldToLocal(Vector3 worldPoint, Vector3 referencePoint)
+    public static Vector3 WorldToLocal(Vector3 worldPoint, Transform transform)
     {
-        return worldPoint - referencePoint;
+        var deltaVector = worldPoint - transform.position;
+        return new Vector3(Vector3.Dot(deltaVector, transform.right), Vector3.Dot(deltaVector, transform.up), Vector3.Dot(deltaVector, transform.forward));
     }
 
     public static List<Vector3> BounceLaser(float maxLaserDistance, Vector3 rayStartPoint, Vector3 rayStartDirection, bool useUnityLibrary = false, bool drawGizmos = true) {
