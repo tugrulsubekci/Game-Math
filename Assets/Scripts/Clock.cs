@@ -53,22 +53,6 @@ public class Clock : MonoBehaviour
     private void OnDrawGizmos() {
         Handles.Disc(transform.rotation, transform.position, transform.forward, 1.0f, false, 0f);
 
-        var hourAngle = MathUtils.roundAngle / TotalHours * Hour;
-        var minuteAngle = MathUtils.roundAngle / MathUtils.totalMinutes * Minute;
-        var secondAngle = MathUtils.roundAngle / MathUtils.totalSeconds * Second;
-
-        var hourDirection = MathUtils.AngleToDirection(hourAngle);
-        var minuteDirection = MathUtils.AngleToDirection(minuteAngle);
-        var secondDirection = MathUtils.AngleToDirection(secondAngle);
-
-        var hourPosition = hourDirection * hourLength + transform.position;
-        var minutePosition = minuteDirection * minuteLength + transform.position;
-        var secondPosition = secondDirection * secondLength + transform.position;
-
-        Handles.DrawLine(transform.position, hourPosition, hourTickness);
-        Handles.DrawLine(transform.position, minutePosition, minuteTickness);
-        Handles.DrawLine(transform.position, secondPosition, secondTickness);
-
         for (int i = 0; i < TotalHours; i++)
             Handles.DrawLine
             (
@@ -85,5 +69,24 @@ public class Clock : MonoBehaviour
                 MathUtils.AngleToDirection(MathUtils.roundAngle / MathUtils.totalMinutes * i) * 1.05f + transform.position,
                 minuteTickness
             );
+
+            
+        var hourAngle = MathUtils.roundAngle / TotalHours * Hour;
+        var minuteAngle = MathUtils.roundAngle / MathUtils.totalMinutes * Minute;
+        var secondAngle = MathUtils.roundAngle / MathUtils.totalSeconds * Second;
+
+        var hourDirection = MathUtils.AngleToDirection(hourAngle);
+        var minuteDirection = MathUtils.AngleToDirection(minuteAngle);
+        var secondDirection = MathUtils.AngleToDirection(secondAngle);
+
+        var hourPosition = hourDirection * hourLength + transform.position;
+        var minutePosition = minuteDirection * minuteLength + transform.position;
+        var secondPosition = secondDirection * secondLength + transform.position;
+
+        Handles.DrawLine(transform.position, hourPosition, hourTickness);
+        Handles.DrawLine(transform.position, minutePosition, minuteTickness);
+
+        Handles.color = Color.red;
+        Handles.DrawLine(transform.position, secondPosition, secondTickness);
     }
 }

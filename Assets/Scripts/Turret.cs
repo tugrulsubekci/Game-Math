@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Turret : MonoBehaviour
 {
-    private Camera MainCamera => SceneView.lastActiveSceneView.camera;
+    private Camera MainCamera => Application.isPlaying ? Camera.main : SceneView.lastActiveSceneView.camera;
     [SerializeField] private GameObject trigger;
     [SerializeField] private GameObject turretHead;
     [SerializeField] private float angle = 30;
@@ -84,6 +84,11 @@ public class Turret : MonoBehaviour
             default:
                 return new WedgeSensor(angle, minRadius, maxRadius, height, transform);
         }
+    }
+
+    private void Update()
+    {
+        PlaceTurret();
     }
 
     public enum TriggerType
