@@ -58,6 +58,7 @@ public static Vector3 WorldToLocal(Vector3 worldPoint, Transform transform)
     return new Vector3(Vector3.Dot(deltaVector, transform.right), Vector3.Dot(deltaVector, transform.up), Vector3.Dot(deltaVector, transform.forward));
 }
 ```
+https://github.com/tugrulsubekci/unity-workspace/assets/104980354/b69fd833-5dba-4466-8369-c066e20b2e57
 * Turret placement according to the main camera
 ```C#
 private Camera MainCamera => SceneView.lastActiveSceneView.camera;
@@ -70,7 +71,6 @@ public void PlaceTurret()
         transform.SetPositionAndRotation(hitInfo.point, Quaternion.LookRotation(Vector3.Cross(MainCamera.transform.right, hitInfo.normal), hitInfo.normal));
 }
 ```
-![](unity-workspace-01.mp4)
 * Turret targeting with constant rotation speed (frame-rate independent)
 ```C#
 private void LookAtTarget(bool isTargetInside)
@@ -82,7 +82,7 @@ private void LookAtTarget(bool isTargetInside)
     turretHead.transform.rotation = Quaternion.Slerp(fromRotation, toRotation, headRotationSpeed / deltaRotation * Time.deltaTime * 10.0f);
 }
 ```
-* __Turret Sensors__
+* ### Turret Sensors
 * Cheese Wedge
 ```C#
  public override bool Check(Vector3 triggerPosition)
