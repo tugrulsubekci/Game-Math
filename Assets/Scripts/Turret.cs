@@ -15,6 +15,7 @@ public class Turret : MonoBehaviour
     private Vector3 turretHeadPosition => turretHead.transform.position;
     private Quaternion defaultOrientationOfHead => Quaternion.LookRotation(transform.forward, transform.up);
     [HideInInspector] public bool fire = false;
+    public bool lookAtTarget = false;
     [SerializeField] private TriggerType triggerType = TriggerType.Wedge;
     private ISensor Sensor => GetSensor(triggerType);
 
@@ -40,12 +41,8 @@ public class Turret : MonoBehaviour
         Sensor.DrawGizmos(isTargetInside);
 
         // Turret Head Rotation Section (DO NOT FORGET ENABLE "ALWAYS REFRESH" IN SCENE VIEW)----------------------------
-        var fromRotation = turretHead.transform.rotation;
-        var toRotation = isTargetInside ? Quaternion.LookRotation(trigger.transform.position - turretHeadPosition, transform.up) : defaultOrientationOfHead;
-        var deltaRotation = Quaternion.Angle(fromRotation, toRotation);
-
-        turretHead.transform.rotation = Quaternion.Slerp(fromRotation, toRotation, headRotationSpeed / deltaRotation * Time.deltaTime * 10.0f);
-        // Turret Head Rotation Section ----------------------------------------------------------------------------------
+        if(lookAtTarget)
+            LookAtTarget(isTargetInside);
 
         Gizmos.color = Color.yellow;
 
@@ -59,6 +56,15 @@ public class Turret : MonoBehaviour
 
         if(raycastSucceeded)
             transform.SetPositionAndRotation(hitInfo.point, Quaternion.LookRotation(Vector3.Cross(MainCamera.transform.right, hitInfo.normal), hitInfo.normal));
+    }
+
+    private void LookAtTarget(bool isTargetInside)
+    {
+        var fromRotation = turretHead.transform.rotation;
+        var toRotation = isTargetInside ? Quaternion.LookRotation(trigger.transform.position - turretHeadPosition, transform.up) : defaultOrientationOfHead;
+        var deltaRotation = Quaternion.Angle(fromRotation, toRotation);
+
+        turretHead.transform.rotation = Quaternion.Slerp(fromRotation, toRotation, headRotationSpeed / deltaRotation * Time.deltaTime * 10.0f);
     }
 
     public void Fire()

@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class MathUtils
 {
+    public const float roundAngle = 360.0f * Mathf.Deg2Rad;
+    public const float halfAngle = 180.0f * Mathf.Deg2Rad;
+    public const float quarterAngle = 90.0f * Mathf.Deg2Rad;
+    public const float totalHours = 12.0f;
+    public const float totalMinutes = 60.0f;
+    public const float totalSeconds = 60.0f;
+    public const float totalMiliseconds = 1000.0f;
     public static Vector3 ReflectVector(Vector3 rayDirection, Vector3 surfaceNormal)
     {
         var scalarProjection = Vector3.Dot(rayDirection, surfaceNormal);
@@ -68,5 +75,13 @@ public class MathUtils
         }
 
         return hitPoints;
+    }
+
+    /// <summary>
+    /// Angle in radians. Returns normalized vector
+    /// </summary>
+    public static Vector3 AngleToDirection(float angle)
+    {
+        return new Vector3(Mathf.Cos(quarterAngle - angle), Mathf.Sin(quarterAngle - angle), 0);
     }
 }
