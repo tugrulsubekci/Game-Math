@@ -1,4 +1,4 @@
-### Freya's Assignments
+### FREYA'S ASSIGNMENTS
 ---
 <details>
    <summary>Bouncing lasers</summary>
@@ -215,3 +215,7 @@ private void OnDrawGizmos()
 https://github.com/tugrulsubekci/unity-workspace/assets/104980354/8793071b-154e-4c27-96e5-0fe24dada582
 
 </details>
+
+### REFERENCES
+---
+- <a href="https://acegikmo.notion.site/Lectures-Assignments-a4419295f33f46c3af113eb74b407607)https://acegikmo.notion.site/Lectures-Assignments-a4419295f33f46c3af113eb74b407607" target="_blank">Freya's Lectures & Assignments</a>
