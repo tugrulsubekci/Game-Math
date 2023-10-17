@@ -147,3 +147,49 @@ public override bool Check(Vector3 triggerPosition)
 ```
 
 https://github.com/tugrulsubekci/unity-workspace/assets/104980354/36cad9ca-2378-4288-ad70-06efb5821e22
+
+* Clock
+```C#
+private void OnDrawGizmos()
+{
+  Handles.Disc(transform.rotation, transform.position, transform.forward, 1.0f, false, 0f);
+
+  for (int i = 0; i < TotalHours; i++)
+      Handles.DrawLine
+      (
+          MathUtils.AngleToDirection(MathUtils.roundAngle / TotalHours * i) * 0.9f + transform.position,
+          MathUtils.AngleToDirection(MathUtils.roundAngle / TotalHours * i) * 1.1f + transform.position,
+          hourTickness
+      );
+
+
+  for (int i = 0; i < MathUtils.totalMinutes; i++)
+      Handles.DrawLine
+      (
+          MathUtils.AngleToDirection(MathUtils.roundAngle / MathUtils.totalMinutes * i) * 0.95f + transform.position,
+          MathUtils.AngleToDirection(MathUtils.roundAngle / MathUtils.totalMinutes * i) * 1.05f + transform.position,
+          minuteTickness
+      );
+
+      
+  var hourAngle = MathUtils.roundAngle / TotalHours * Hour;
+  var minuteAngle = MathUtils.roundAngle / MathUtils.totalMinutes * Minute;
+  var secondAngle = MathUtils.roundAngle / MathUtils.totalSeconds * Second;
+
+  var hourDirection = MathUtils.AngleToDirection(hourAngle);
+  var minuteDirection = MathUtils.AngleToDirection(minuteAngle);
+  var secondDirection = MathUtils.AngleToDirection(secondAngle);
+
+  var hourPosition = hourDirection * hourLength + transform.position;
+  var minutePosition = minuteDirection * minuteLength + transform.position;
+  var secondPosition = secondDirection * secondLength + transform.position;
+
+  Handles.DrawLine(transform.position, hourPosition, hourTickness);
+  Handles.DrawLine(transform.position, minutePosition, minuteTickness);
+
+  Handles.color = Color.red;
+  Handles.DrawLine(transform.position, secondPosition, secondTickness);
+}
+```
+
+https://github.com/tugrulsubekci/unity-workspace/assets/104980354/8793071b-154e-4c27-96e5-0fe24dada582
