@@ -1,7 +1,8 @@
-# Unity Workspace
----
 ### Freya's Assignments
-* Bouncing lasers
+---
+<details>
+   <summary>Bouncing lasers</summary>
+   
 ```C#
 public static List<Vector3> BounceLaser(float maxLaserDistance, Vector3 rayStartPoint, Vector3 rayStartDirection, bool useUnityLibrary = false, bool drawGizmos = true)
 {
@@ -29,7 +30,10 @@ public static List<Vector3> BounceLaser(float maxLaserDistance, Vector3 rayStart
    return hitPoints;
 }
 ```
-* Transformation (local to world, world to local)
+</details>
+
+<details><summary>Transformation (local to world, world to local)</summary>
+   
 ```C#
 public static Vector3 LocalToWorld(Vector3 localPoint, Transform transform)
 {
@@ -58,8 +62,12 @@ public static Vector3 WorldToLocal(Vector3 worldPoint, Transform transform)
     return new Vector3(Vector3.Dot(deltaVector, transform.right), Vector3.Dot(deltaVector, transform.up), Vector3.Dot(deltaVector, transform.forward));
 }
 ```
+
 https://github.com/tugrulsubekci/unity-workspace/assets/104980354/b69fd833-5dba-4466-8369-c066e20b2e57
-* Turret placement according to the main camera
+</details>
+
+<details><summary>Turret placement according to the main camera</summary>
+   
 ```C#
 private Camera MainCamera => SceneView.lastActiveSceneView.camera;
 
@@ -71,7 +79,10 @@ public void PlaceTurret()
         transform.SetPositionAndRotation(hitInfo.point, Quaternion.LookRotation(Vector3.Cross(MainCamera.transform.right, hitInfo.normal), hitInfo.normal));
 }
 ```
-* Turret targeting with constant rotation speed (frame-rate independent)
+
+</details>
+<details><summary>Turret targeting with constant rotation speed (frame-rate independent)</summary>
+
 ```C#
 private void LookAtTarget(bool isTargetInside)
 {
@@ -82,8 +93,10 @@ private void LookAtTarget(bool isTargetInside)
     turretHead.transform.rotation = Quaternion.Slerp(fromRotation, toRotation, headRotationSpeed / deltaRotation * Time.deltaTime * 10.0f);
 }
 ```
-* ### Turret Sensors
-* Cheese Wedge
+</details>
+
+<details><summary>Cheese Wedge Sensor</summary>
+   
 ```C#
  public override bool Check(Vector3 triggerPosition)
  {
@@ -109,8 +122,10 @@ private void LookAtTarget(bool isTargetInside)
 ```
 
 https://github.com/tugrulsubekci/unity-workspace/assets/104980354/0bc0764e-f168-4174-94d8-237ee30a1b56
+</details>
 
-* Spherical
+<details><summary>Spherical Sensor</summary>
+   
 ```C#
 public override bool Check(Vector3 triggerPosition)
 {
@@ -125,7 +140,10 @@ public override bool Check(Vector3 triggerPosition)
 
 https://github.com/tugrulsubekci/unity-workspace/assets/104980354/6fc8ba21-a22e-4a66-9f28-96987ceb86bb
 
-* Cone
+</details>
+
+<details><summary>Cone Sensor</summary>
+   
 ```C#
 public override bool Check(Vector3 triggerPosition)
 {
@@ -147,8 +165,10 @@ public override bool Check(Vector3 triggerPosition)
 ```
 
 https://github.com/tugrulsubekci/unity-workspace/assets/104980354/36cad9ca-2378-4288-ad70-06efb5821e22
+</details>
 
-* Clock
+<details><summary>Clock</summary>
+   
 ```C#
 private void OnDrawGizmos()
 {
@@ -193,3 +213,5 @@ private void OnDrawGizmos()
 ```
 
 https://github.com/tugrulsubekci/unity-workspace/assets/104980354/8793071b-154e-4c27-96e5-0fe24dada582
+
+</details>
