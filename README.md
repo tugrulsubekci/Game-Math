@@ -107,6 +107,9 @@ private void LookAtTarget(bool isTargetInside)
      return true;
  }
 ```
+
+https://github.com/tugrulsubekci/unity-workspace/assets/104980354/0bc0764e-f168-4174-94d8-237ee30a1b56
+
 * Spherical
 ```C#
 public override bool Check(Vector3 triggerPosition)
@@ -119,6 +122,9 @@ public override bool Check(Vector3 triggerPosition)
     return true;
 }
 ```
+
+https://github.com/tugrulsubekci/unity-workspace/assets/104980354/6fc8ba21-a22e-4a66-9f28-96987ceb86bb
+
 * Cone
 ```C#
 public override bool Check(Vector3 triggerPosition)
@@ -139,3 +145,5 @@ public override bool Check(Vector3 triggerPosition)
     return true;
 }
 ```
+
+https://github.com/tugrulsubekci/unity-workspace/assets/104980354/36cad9ca-2378-4288-ad70-06efb5821e22
